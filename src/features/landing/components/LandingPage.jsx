@@ -18,11 +18,11 @@ import MobileAppPromotion from "./MobileAppPromotion";
 import TopCardsSection from "./sections/TopCardsSection";
 import { tweets } from "../../../shared/constants/testimonials";
 import { detectDevice } from "../../../core/utils/deviceUtils";
-
-// In LandingPage.jsx
+import TopSearchs from "./sections/TopSearchs";
+import StatsSection from "./sections/StatsSection";
 
 const MobileView = ({
-  deviceInfo, // Make sure deviceInfo is passed
+  deviceInfo,
   visibleTweets,
   handlePrevPage,
   handleNextPage,
@@ -36,84 +36,104 @@ const MobileView = ({
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      <Header />
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          bgcolor: "background.default",
-        }}
-      >
-        <Container maxWidth="lg" sx={{ pt: { xs: 4, sm: 6 }, pb: 3 }}>
-          <Typography
-            variant="h2"
-            align="center"
-            sx={{
-              fontSize: { xs: "2rem", sm: "2.5rem" },
-              fontWeight: "bold",
-              mb: 2,
-            }}
-          >
-            Get the CCReward App
-          </Typography>
-          <Typography
-            variant="h5"
-            align="center"
-            sx={{
-              fontSize: { xs: "1.125rem", sm: "1.25rem" },
-              color: "text.secondary",
-            }}
-          >
-            Download our app for the best credit card rewards experience
-          </Typography>
-        </Container>
-
-        <Box component="section">
-          <MobileAppPromotion isAndroid={Boolean(deviceInfo.isAndroid)} />
-        </Box>
-
-        <Box component="section">
-          <FeaturesSection />
-        </Box>
-
-        <Box component="section">
-          <TopCardsSection />
-        </Box>
-
-        <Box component="section">
-          <BankSection />
-        </Box>
-
-        <Box component="section">
-          <TestimonialsSection
-            visibleTweets={visibleTweets}
-            handlePrevPage={handlePrevPage}
-            handleNextPage={handleNextPage}
-            isMobile={isMobile}
-          />
-        </Box>
-      </Box>
-      <Footer />
-
-      {alert.open && (
-        <Alert
-          severity={alert.severity}
-          onClose={() => setAlert({ ...alert, open: false })}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        position: "relative",
+      }}
+    >
+      {/* Main Content with higher z-index */}
+      <Box sx={{ position: "relative", zIndex: 10 }}>
+        <Header />
+        <Box
+          component="main"
           sx={{
-            position: "fixed",
-            bottom: 24,
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: theme.zIndex.snackbar,
-            maxWidth: "90%",
-            width: "auto",
-            boxShadow: theme.shadows[8],
+            flexGrow: 1,
+            bgcolor: "background.default",
+            // add some backdrop or slight opacity to ensure text legibility
+            backdropFilter: "blur(2px)",
           }}
         >
-          {alert.message}
-        </Alert>
-      )}
+          <Container maxWidth="lg" sx={{ pt: { xs: 4, sm: 6 }, pb: 3 }}>
+            <Typography
+              variant="h2"
+              align="center"
+              sx={{
+                fontSize: { xs: "2rem", sm: "2.5rem" },
+                fontWeight: "bold",
+                mb: 2,
+              }}
+            >
+              Get the CCReward App
+            </Typography>
+            <Typography
+              variant="h5"
+              align="center"
+              sx={{
+                fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                color: "text.secondary",
+              }}
+            >
+              Download our app for the best credit card rewards experience
+            </Typography>
+          </Container>
+
+          <Box component="section">
+            <MobileAppPromotion isAndroid={Boolean(deviceInfo.isAndroid)} />
+          </Box>
+
+          <Box component="section">
+            <FeaturesSection />
+          </Box>
+
+          <Box component="section" sx={{ bgcolor: "background.paper" }}>
+            <StatsSection />
+          </Box>
+
+          <Box component="section" sx={{ bgcolor: "background.default" }}>
+            <TopCardsSection />
+          </Box>
+
+          <Box sx={{ bgcolor: "background.paper" }}>
+            <TopSearchs />
+          </Box>
+
+          <Box component="section" sx={{ bgcolor: "background.default" }}>
+            <BankSection />
+          </Box>
+
+          <Box component="section" sx={{ bgcolor: "background.paper" }}>
+            <TestimonialsSection
+              visibleTweets={visibleTweets}
+              handlePrevPage={handlePrevPage}
+              handleNextPage={handleNextPage}
+              isMobile={isMobile}
+            />
+          </Box>
+        </Box>
+        <Footer />
+
+        {alert.open && (
+          <Alert
+            severity={alert.severity}
+            onClose={() => setAlert({ ...alert, open: false })}
+            sx={{
+              position: "fixed",
+              bottom: 24,
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: theme.zIndex.snackbar,
+              maxWidth: "90%",
+              width: "auto",
+              boxShadow: theme.shadows[8],
+            }}
+          >
+            {alert.message}
+          </Alert>
+        )}
+      </Box>
     </Box>
   );
 };
@@ -136,78 +156,96 @@ const DesktopView = ({
   alert,
   setAlert,
 }) => (
-  <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-    <Header />
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      minHeight: "100vh",
+      position: "relative",
+    }}
+  >
+    <Box className="absolute inset-0 z-0 overflow-hidden"></Box>
+    {/* Main Content with higher z-index */}
+    <Box className="relative z-10">
+      <Header />
 
-    <HeroSection
-      cardImages={cardImages}
-      isMobile={isMobile}
-      isTablet={isTablet}
-      isLargeScreen={isLargeScreen}
-      handleSignIn={handleSignIn}
-      isLoading={isLoading}
-      isAuthenticated={isAuthenticated}
-      loading={loading}
-      signInWithGoogle={signInWithGoogle}
-      signInAnonymously={signInAnonymously}
-    />
-
-    <Box sx={{ bgcolor: "background.default" }}>
-      <FeaturesSection />
-    </Box>
-
-    <Box component="section">
-          <TopCardsSection />
-        </Box>
-
-    <Box sx={{ bgcolor: "background.paper" }}>
-      <BankSection />
-    </Box>
-
-    <CallToActionSection
-      isAuthenticated={isAuthenticated}
-      handleSignIn={handleSignIn}
-      signInWithGoogle={signInWithGoogle}
-    />
-
-    <Box sx={{ bgcolor: "background.default" }}>
-      <AppStoreSection isMobile={isMobile} theme={theme} />
-    </Box>
-
-    <Box sx={{ bgcolor: "background.paper" }}>
-      <TestimonialsSection
-        visibleTweets={visibleTweets}
-        handlePrevPage={handlePrevPage}
-        handleNextPage={handleNextPage}
+      <HeroSection
+        cardImages={cardImages}
         isMobile={isMobile}
+        isTablet={isTablet}
+        isLargeScreen={isLargeScreen}
+        handleSignIn={handleSignIn}
+        isLoading={isLoading}
+        isAuthenticated={isAuthenticated}
+        loading={loading}
+        signInWithGoogle={signInWithGoogle}
+        signInAnonymously={signInAnonymously}
       />
+
+      <Box sx={{ bgcolor: "background.default" }}>
+        <FeaturesSection />
+      </Box>
+
+      <Box sx={{ bgcolor: "background.paper" }}>
+        <StatsSection />
+      </Box>
+
+      <Box sx={{ bgcolor: "background.default" }}>
+        <TopCardsSection />
+      </Box>
+
+      <Box sx={{ bgcolor: "background.paper" }}>
+        <TopSearchs />
+      </Box>
+
+      <Box sx={{ bgcolor: "background.default" }}>
+        <BankSection />
+      </Box>
+
+      <CallToActionSection
+        isAuthenticated={isAuthenticated}
+        handleSignIn={handleSignIn}
+        signInWithGoogle={signInWithGoogle}
+      />
+
+      <Box sx={{ bgcolor: "background.default" }}>
+        <AppStoreSection isMobile={isMobile} theme={theme} />
+      </Box>
+
+      <Box sx={{ bgcolor: "background.paper" }}>
+        <TestimonialsSection
+          visibleTweets={visibleTweets}
+          handlePrevPage={handlePrevPage}
+          handleNextPage={handleNextPage}
+          isMobile={isMobile}
+        />
+      </Box>
+
+      <Footer />
+
+      {alert.open && (
+        <Alert
+          severity={alert.severity}
+          onClose={() => setAlert({ ...alert, open: false })}
+          sx={{
+            position: "fixed",
+            bottom: 24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: theme.zIndex.snackbar,
+            maxWidth: "90%",
+            width: "auto",
+            boxShadow: theme.shadows[8],
+          }}
+        >
+          {alert.message}
+        </Alert>
+      )}
     </Box>
-
-    <Footer />
-
-    {alert.open && (
-      <Alert
-        severity={alert.severity}
-        onClose={() => setAlert({ ...alert, open: false })}
-        sx={{
-          position: "fixed",
-          bottom: 24,
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: theme.zIndex.snackbar,
-          maxWidth: "90%",
-          width: "auto",
-          boxShadow: theme.shadows[8],
-        }}
-      >
-        {alert.message}
-      </Alert>
-    )}
   </Box>
 );
 
 const LandingPage = () => {
-  // All hooks at the top
   const router = useRouter();
   const {
     signInWithGoogle,
@@ -251,11 +289,9 @@ const LandingPage = () => {
   );
 
   useEffect(() => {
-    // Initial device detection
     const initialDeviceInfo = detectDevice();
     setDeviceInfo(initialDeviceInfo);
 
-    // Optional: Add resize listener for tablet/desktop switchover
     const handleResize = () => {
       const updatedDeviceInfo = detectDevice();
       setDeviceInfo(updatedDeviceInfo);
@@ -303,7 +339,6 @@ const LandingPage = () => {
     }
   }, [loading, isAuthenticated, user?.uid, router, hasCheckedCards]);
 
-  // Handlers
   const handleSignIn = async (signInMethod) => {
     setIsLoading(true);
     try {
@@ -316,11 +351,33 @@ const LandingPage = () => {
       setHasCheckedCards(false);
     } catch (error) {
       console.error("Error signing in:", error);
-      setAlert({
-        open: true,
-        message: "Failed to sign in. Please try again.",
-        severity: "error",
-      });
+      if (error.code === "auth/popup-closed-by-user") {
+        setAlert({
+          open: false,
+          message: "",
+          severity: "info",
+        });
+      } else if (error.code === "auth/cancelled-popup-request") {
+        setAlert({
+          open: true,
+          message:
+            "Another sign-in window is already open. Please close it and try again.",
+          severity: "warning",
+        });
+      } else if (error.code === "auth/popup-blocked") {
+        setAlert({
+          open: true,
+          message:
+            "Pop-up was blocked by your browser. Please enable pop-ups and try again.",
+          severity: "warning",
+        });
+      } else {
+        setAlert({
+          open: true,
+          message: "Failed to sign in. Please try again.",
+          severity: "error",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -334,7 +391,6 @@ const LandingPage = () => {
     setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
   };
 
-  // Common props
   const commonProps = {
     visibleTweets,
     handlePrevPage,
@@ -343,10 +399,9 @@ const LandingPage = () => {
     theme,
     alert,
     setAlert,
-    deviceInfo, // Make sure deviceInfo is included
+    deviceInfo,
   };
 
-  // Render based on screen size
   return isMobileDevice ? (
     <MobileView {...commonProps} />
   ) : (

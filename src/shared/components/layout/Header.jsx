@@ -5,7 +5,6 @@ import {
   Typography,
   IconButton,
   Button,
-  Avatar,
   Box,
   Menu,
   MenuItem,
@@ -31,6 +30,7 @@ import { getCardsForUser } from "../../../core/services/firebaseUtils";
 import { onCardUpdate } from "../../../core/utils/events";
 import { detectDevice } from "../../../core/utils/deviceUtils";
 import Image from "next/image";
+import ProfileMenu from "./ProfileMenu";
 
 function Header() {
   const { mode, toggleTheme } = useAppTheme();
@@ -43,12 +43,11 @@ function Header() {
     isMobile: false,
     isAndroid: false,
     isIOS: false,
-    isTablet: false
+    isTablet: false,
   });
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userCardCount, setUserCardCount] = useState(0);
 
-  // Move all hooks before any conditional returns
   useEffect(() => {
     setDeviceInfo(detectDevice());
   }, []);
@@ -137,9 +136,10 @@ function Header() {
           >
             <Box sx={{ position: "relative", width: 40, height: 40, mr: 1 }}>
               <Image
-                src={mode === "dark"
-                  ? "f4bf16b1-527e-4d80-47b4-99989a1ded00"
-                  : "b6c3c6f1-a744-4e47-8c50-4c33c84c3900"
+                src={
+                  mode === "dark"
+                    ? "f4bf16b1-527e-4d80-47b4-99989a1ded00"
+                    : "b6c3c6f1-a744-4e47-8c50-4c33c84c3900"
                 }
                 alt="CCReward Logo"
                 width={40}
@@ -257,30 +257,8 @@ function Header() {
                   )
               )}
 
-              {isAuthenticated() && (
-                <Button
-                  color="inherit"
-                  onClick={handleLogout}
-                  startIcon={<LogoutIcon />}
-                  sx={{ ml: 2 }}
-                >
-                  Logout
-                </Button>
-              )}
+              {user && <ProfileMenu user={user} onLogout={handleLogout} />}
             </>
-          )}
-
-          {isAuthenticated() && (
-            <Avatar
-              src={user?.photoURL || ""}
-              alt={user?.displayName || "User"}
-              slots={{ root: "div" }}
-              slotProps={{
-                root: {
-                  sx: { ml: 2, width: 40, height: 40 },
-                },
-              }}
-            />
           )}
         </Box>
       </Toolbar>
